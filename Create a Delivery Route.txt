@@ -1,0 +1,58 @@
+Create a Delivery Route
+Hillman requires a new delivery route plan from HQ-KA13’s delivery region. The managing director has to
+know the following:
+• What his most expensive route is, if the cost is £1.50 per mile and two trips are planned per day
+• What the average travel distance in miles is for the region per 30-day month
+With your newfound knowledge in building the technology stack for turning data lakes into business assets,
+can you convert the graph stored in the Assess step called
+“Assess_Best_Logistics” into the shortest path between the two points?
+C:\VKHCG\03-Hillman\05-Organise\Organise-Routes.py
+# -*- coding: utf-8 -*-
+################################################################
+import sys
+import os
+import pandas as pd
+################################################################
+Base='C:/VKHCG'
+################################################################
+print('################################')
+print('Working Base :',Base, ' using ', sys.platform)
+print('################################')
+################################################################
+sInputFileName='02-Assess/01-EDS/02-Python/Assess_Shipping_Routes.txt'
+################################################################
+sOutputFileName='05-Organise/01-EDS/02-Python/Organise-Routes.csv'
+Company='03-Hillman'
+################################################################
+PSIT1P2 ~~~~~ Data Science Practical
+M. Sc. [Information Technology ] SEMESTER ~ I Teacher’s Reference Manual
+179
+################################################################
+### Import Routes Data
+################################################################
+sFileName=Base + '/' + Company + '/' + sInputFileName
+print('################################')
+print('Loading :',sFileName)
+print('################################')
+RouteDataRaw=pd.read_csv(sFileName,header=0,low_memory=False, sep='|', encoding="latin-1")
+print('################################')
+################################################################
+RouteStart=RouteDataRaw[RouteDataRaw['StartAt']=='WH-KA13']
+################################################################
+RouteDistance=RouteStart[RouteStart['Cost']=='DistanceMiles']
+RouteDistance=RouteDistance.sort_values(by=['Measure'], ascending=False)
+################################################################
+RouteMax=RouteStart["Measure"].max()
+RouteMaxCost=round((((RouteMax/1000)*1.5*2)),2)
+print('################################')
+print('Maximum (£) per day:')
+print(RouteMaxCost)
+print('################################')
+################################################################
+RouteMean=RouteStart["Measure"].mean()
+RouteMeanMonth=round((((RouteMean/1000)*2*30)),6)
+print('################################')
+print('Mean per Month (Miles):')
+print(RouteMeanMonth)
+print('################################')
+Output:
